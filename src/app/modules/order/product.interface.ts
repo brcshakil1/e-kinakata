@@ -13,7 +13,7 @@ export interface TProduct {
   description: string;
   price: number;
   category: string;
-  tags: Array<string>;
+  tags: [string];
   variants: TVariants[];
   inventory: TInventory;
 }

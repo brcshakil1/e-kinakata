@@ -24,12 +24,6 @@ const productSchema = new Schema<TProduct>({
   category: { type: String, required: true },
   tags: {
     type: [String],
-    validate: {
-      validator: function (array: Array<string>) {
-        return array.every((tag) => typeof tag === "string");
-      },
-      message: "All tags must be strings.",
-    },
     required: true,
   },
   variants: { type: [variantSchema], required: true },
