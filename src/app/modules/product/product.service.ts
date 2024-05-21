@@ -6,8 +6,16 @@ const createProductIntoDB = async (productData: TProduct) => {
   return result;
 };
 
-const getAllProductFromDB = async () => {
-  const result = await Product.find();
+const getAllProductFromDB = async (searchTerm: any) => {
+  let query = {};
+  if (searchTerm) {
+    // search product. doesn't need case sensitivity
+    const regex = new RegExp(searchTerm, "i");
+    query = {
+      $or: [{ name: regex }, { description: regex }],
+    };
+  }
+  const result = await Product.find(query);
   return result;
 };
 
