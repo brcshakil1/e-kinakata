@@ -14,6 +14,9 @@ app.use((0, cors_1.default)());
 // application router
 app.use("/api/products", product_routes_1.ProductRouter);
 app.use("/api/orders", order_routes_1.OrderRouter);
+app.get("/", (req, res) => {
+    res.send("e-kinakata's server is running!");
+});
 // global routes handling
 app.all("*", (req, res) => {
     res.status(404).json({
@@ -21,7 +24,16 @@ app.all("*", (req, res) => {
         message: "Route not found",
     });
 });
-app.get("/", (req, res) => {
-    res.send("e-kinakata's server is running!");
+// global error handler
+app.use((error, req, res, next) => {
+    if (error) {
+        res.status(400).json({
+            success: false,
+            message: "Something went wrong. Please try again later.",
+        });
+    }
+    else {
+        next();
+    }
 });
 exports.default = app;
