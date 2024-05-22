@@ -1,13 +1,17 @@
-# Express Application
+# E-Kinakata Express Server
 
-This is a simple Express application with error handling and a route for testing purposes.
+Welcome to the E-Kinakata Express server! This server provides endpoints to manage products and orders for an e-commerce platform.
 
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+Before running the server locally, ensure you have the following installed:
 
-- You have installed [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/).
-- You have a basic understanding of TypeScript (optional, as the project is in TypeScript).
+- [Node.js](https://nodejs.org/) and npm
+- [MongoDB](https://www.mongodb.com/) database
+- `.env` file with the following environment variables:
+
+`PORT=3000
+DATABASE_URL=your_mongodb_connection_string`
 
 ## Getting Started
 
