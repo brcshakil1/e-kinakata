@@ -10,8 +10,8 @@ Before running the server locally, ensure you have the following installed:
 - [MongoDB](https://www.mongodb.com/) database
 - `.env` file with the following environment variables:
 
-`PORT=3000
-DATABASE_URL=your_mongodb_connection_string`
+`PORT=3000`
+`DATABASE_URL=your_mongodb_connection_string`
 
 ### Installation
 
