@@ -64,9 +64,11 @@ const updateProduct = async (req: Request, res: Response) => {
   try {
     const updatedProduct = req.body;
     const { productId } = req.params;
+    const zodParseProductData = productValidationSchema.parse(updatedProduct);
+
     const result = await ProductServices.updateProductIntoDB(
       productId,
-      updatedProduct
+      zodParseProductData
     );
     res.status(200).json({
       success: true,

@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TOrder } from "./order.interface";
 import Product from "../product/product.model";
-import { TProduct } from "../product/product.interface";
 
 const orderSchema = new Schema<TOrder>({
   email: { type: String, required: true },
@@ -13,7 +12,11 @@ const orderSchema = new Schema<TOrder>({
 // update product inventory
 orderSchema.post("save", async function (doc, next) {
   const order = doc;
-  const product: any = await Product.findOne({ _id: order.productId });
+  const product = await Product.findOne({ _id: order.productId });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
 
   const updateQuantity = product?.inventory?.quantity - order?.quantity;
 
@@ -29,7 +32,9 @@ orderSchema.post("save", async function (doc, next) {
       { $set: { "inventory.inStock": false } },
       { new: true }
     );
+    next();
   }
+  next();
 });
 
 const Order = model<TOrder>("Order", orderSchema);

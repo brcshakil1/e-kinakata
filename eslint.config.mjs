@@ -11,7 +11,11 @@ export default [
       "prefer-const": "error",
       "no-console": "warn",
       "no-undef": "error",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
+  },
+  {
+    ignores: ["**/node_modules/", "**/dist/"],
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

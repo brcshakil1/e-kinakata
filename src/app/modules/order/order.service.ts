@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TOrder } from "./order.interface";
 import Order from "./order.model";
 
@@ -9,7 +10,7 @@ const createOrderIntoDB = async (orderData: TOrder) => {
 
 // get all order from database
 const getAllOderFromDB = async (email: any) => {
-  let query: { email?: string } = {};
+  const query: { email?: string } = {};
   if (email) {
     query.email = email;
   }
