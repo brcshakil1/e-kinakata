@@ -58,7 +58,6 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getAllOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email } = req.query;
-        console.log(email);
         const result = yield order_service_1.OrderServices.getAllOderFromDB(email);
         res.status(200).json({
             success: true,
