@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TOrder } from "./order.interface";
 import Product from "../product/product.model";
+import { TProduct } from "../product/product.interface";
 
 const orderSchema = new Schema<TOrder>({
   email: { type: String, required: true },
@@ -9,27 +10,26 @@ const orderSchema = new Schema<TOrder>({
   quantity: { type: Number, required: true },
 });
 
-// user middleware to check if ordered product's id match
-orderSchema.pre("save", async function (next) {
-  const order = this;
-  const product = await Product.findOne({ _id: order.productId });
+// update product inventory
+orderSchema.post("save", async function (doc, next) {
+  const order = doc;
+  const product: any = await Product.findOne({ _id: order.productId });
 
-  if (!product) {
-    throw new Error("Sorry, the product isn't available.");
-  }
+  const updateQuantity = product?.inventory?.quantity - order?.quantity;
 
-  const updatedQuantity = product.inventory.quantity - order.quantity;
-
-  if (updatedQuantity < 0) {
-    throw new Error("Sorry, not enough stock available for this product.");
-  }
-
-  await Product.findByIdAndUpdate(
-    { _id: order.productId },
-    { inventory: { quantity: updatedQuantity } },
+  const data = await Product.findByIdAndUpdate(
+    order.productId,
+    { $set: { "inventory.quantity": updateQuantity } },
     { new: true }
   );
-  next();
+
+  if (data?.inventory?.quantity === 0) {
+    await Product.findByIdAndUpdate(
+      order.productId,
+      { $set: { "inventory.inStock": false } },
+      { new: true }
+    );
+  }
 });
 
 const Order = model<TOrder>("Order", orderSchema);
