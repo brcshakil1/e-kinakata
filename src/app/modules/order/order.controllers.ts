@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
 import Product from "../product/product.model";
+import { orderValidationSchema } from "./order.validation";
 
 const createOrder = async (req: Request, res: Response) => {
   try {
     const orderData = req.body;
+
+    const zodDataValidation = orderValidationSchema.parse(orderData);
 
     // getting all product to match with order
     const product = await Product.findById(orderData?.productId);
@@ -16,7 +19,6 @@ const createOrder = async (req: Request, res: Response) => {
         message: "Order not found",
       });
     }
-
     // if ordered quantity is more than product quantity
     else if (product && product?.inventory?.quantity < orderData?.quantity) {
       return res.status(400).json({
@@ -27,17 +29,17 @@ const createOrder = async (req: Request, res: Response) => {
 
     // if everything is okay
     else {
-      const result = await OrderServices.createOrderIntoDB(orderData);
+      const result = await OrderServices.createOrderIntoDB(zodDataValidation);
       res.status(200).json({
         success: true,
         message: "Order created successfully!",
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     res.status(400).json({
       success: false,
-      message: err.msg ? err.msg : "Order not found",
+      message: "Order not found",
       error: err,
     });
   }
